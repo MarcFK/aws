@@ -41,6 +41,18 @@ async function showStations(url) {
 
     // Wetterstationen mit Icons und Popups
     console.log(geojson)
+    L.geoJSON(geojson, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: "icons/wifi.png",
+                    iconAnchor: [16, 37],
+                    popupAnchor: [0, -37]
+
+                })
+            });
+        }
+    })
 
 }
 showStations("https://static.avalanche.report/weather_stations/stations.geojson");
