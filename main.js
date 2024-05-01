@@ -57,7 +57,13 @@ async function showStations(url) {
             console.log(feature.properties);
             layer.bindPopup(`
             <h4> ${feature.properties.name} (${feature.geometry.coordinates[2]}m) </h4>
-            
+            <ul>
+                <li> Lufttemperatur (°C): ${feature.properties.LT} </li>
+                <li> Relative Luftfeuchte (%): ${feature.properties.RH} </li>
+                <li> Windgeschwindigkeit (km/h): ${feature.properties.GS_O} </li>
+                <li> Schneehöhe (cm): ${feature.properties.HS} </li>
+            </ul>
+            <p> ${feature.properties.date} </p>
             `);
         }
     }).addTo(themaLayer.stations);
