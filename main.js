@@ -36,6 +36,12 @@ L.control.scale({
     imperial: false,
 }).addTo(map);
 
+function getColor(value, ramp) {
+    console.log("getColor: value ", value, "ramp: ", ramp);
+
+}
+getColor(17, COLORS.temperature);
+
 function showTemperature(geojson) {
     L.geoJSON(geojson, {
         filter: function(feature) {
