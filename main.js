@@ -69,6 +69,26 @@ function showTemperature(geojson) {
     }) .addTo(themaLayer.temperature);
 }
 
+function showWind(geojson) {
+    L.geoJSON(geojson, {
+        filter: function(feature) {
+            // feature.properties.WG
+            if (feature.properties.WG > -50 && feature.properties.WG < 50) {
+                return true;
+            }
+        },
+        pointToLayer: function(feature, latlng) {
+            let color = getColor(feature.properties.WG, COLORS.wind);
+            return L.marker(latlng, {
+                icon: L.divIcon({
+                    className: "aws-div-icon",
+                    html: `<span style="background-color: ${color};">${feature.properties.WG.toFixed()}</span>`
+                })
+            })
+        }
+    }) .addTo(themaLayer.temperature);
+}
+
 // GeoJSON der Wetterstationen laden
 async function showStations(url) {
     let response = await fetch(url);
