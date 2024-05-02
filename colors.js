@@ -15,8 +15,8 @@ const COLORS = {
     ],
 
     /*wind: [
-        {min: 0,max: 5, color:},
-        {min: 5,max: 10, color:},
+        {min: 0,max: 5, color: "#ffff64"},
+        {min: 5,max: 10, color: "#c8ff64"},
         {min: 10,max: 20, color:},
         {min: 20,max: 40, color:},
         {min: 40,max: 60, color:},

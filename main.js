@@ -15,6 +15,7 @@ let map = L.map("map", {
 let themaLayer = {
     stations: L.featureGroup().addTo(map),
     temperature: L.featureGroup().addTo(map),
+    wind: L.featureGroup().addTo(map)
 }
 
 // Hintergrundlayer
@@ -28,7 +29,8 @@ L.control.layers({
     "Esri WorldImagery": L.tileLayer.provider("Esri.WorldImagery")
 }, {
     "Wetterstationen": themaLayer.stations,
-    "Temperatur": themaLayer.temperature
+    "Temperatur °C": themaLayer.temperature,
+    "Wind km/h": themaLayer.wind
 }).addTo(map);
 
 // Maßstab
@@ -37,10 +39,15 @@ L.control.scale({
 }).addTo(map);
 
 function getColor(value, ramp) {
-    console.log("getColor: value ", value, "ramp: ", ramp);
+    // console.log("getColor: value ", value, "ramp: ", ramp);
+    for (let rule of ramp) {
+        console.log("Rule ", rule);
+        if (value >= rule.min && value < rule.max) {
+            return rule.color;
+        }
+    }
 
 }
-getColor(17, COLORS.temperature);
 
 function showTemperature(geojson) {
     L.geoJSON(geojson, {
@@ -51,10 +58,11 @@ function showTemperature(geojson) {
             }
         },
         pointToLayer: function(feature, latlng) {
+            let color = getColor(feature.properties.LT, COLORS.temperature);
             return L.marker(latlng, {
                 icon: L.divIcon({
                     className: "aws-div-icon",
-                    html: `<span>${feature.properties.LT.toFixed()}</span>`
+                    html: `<span style="background-color: ${color};">${feature.properties.LT.toFixed()}</span>`
                 })
             })
         }
@@ -82,7 +90,7 @@ async function showStations(url) {
 
         onEachFeature: function (feature, layer) {
             let pointInTime = new Date(feature.properties.date);
-            console.log(pointInTime);
+            // console.log(pointInTime);
             layer.bindPopup(`
             <h4> ${feature.properties.name} (${feature.geometry.coordinates[2]}m) </h4>
             <ul>
