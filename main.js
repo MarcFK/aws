@@ -39,7 +39,7 @@ L.control.scale({
 }).addTo(map);
 
 function getColor(value, ramp) {
-    // console.log("getColor: value ", value, "ramp: ", ramp);
+    console.log("getColor: value ", value, "ramp: ", ramp);
     for (let rule of ramp) {
         console.log("Rule ", rule);
         if (value >= rule.min && value < rule.max) {
