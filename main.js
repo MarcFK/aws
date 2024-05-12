@@ -110,7 +110,7 @@ function showSnow(geojson) {
             return L.marker(latlng, {
                 icon: L.divIcon({
                     className: "aws-div-icon",
-                    html: `<span style="background-color: ${color};">${feature.properties.HS.toFixed(1)}</span>`
+                    html: `<span style="background-color: ${color};">${feature.properties.HS.toFixed(0)}</span>`
                 })
             })
         }
