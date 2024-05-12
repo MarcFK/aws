@@ -13,9 +13,10 @@ let map = L.map("map", {
 
 // thematische Layer
 let themaLayer = {
-    stations: L.featureGroup().addTo(map),
-    temperature: L.featureGroup().addTo(map),
-    wind: L.featureGroup().addTo(map)
+    stations: L.featureGroup(),
+    temperature: L.featureGroup(),
+    wind: L.featureGroup(),
+    snow: L.featureGroup().addTo(map)
 }
 
 // Hintergrundlayer
@@ -30,7 +31,8 @@ L.control.layers({
 }, {
     "Wetterstationen": themaLayer.stations,
     "Temperatur °C": themaLayer.temperature,
-    "Wind km/h": themaLayer.wind
+    "Wind km/h": themaLayer.wind,
+    "Schneehöhe cm": themaLayer.snow
 }).addTo(map);
 
 // Maßstab
@@ -48,6 +50,8 @@ function getColor(value, ramp) {
     }
 
 }
+
+// Temperatur
 
 function showTemperature(geojson) {
     L.geoJSON(geojson, {
@@ -69,6 +73,8 @@ function showTemperature(geojson) {
     }) .addTo(themaLayer.temperature);
 }
 
+// Windstärke und Richtung
+
 function showWind(geojson) {
     L.geoJSON(geojson, {
         filter: function(feature) {
@@ -87,6 +93,29 @@ function showWind(geojson) {
             })
         }
     }) .addTo(themaLayer.wind);
+}
+
+// Schneehöhe
+
+function showSnow(geojson) {
+    L.geoJSON(geojson, {
+        filter: function(feature) {
+            // feature.properties.HS
+            if (feature.properties.HS > -5 && feature.properties.HS < 600) {
+                return true;
+            }
+        },
+        pointToLayer: function(feature, latlng) {
+            let color = getColor(feature.properties.HS, COLORS.snow);
+            return L.marker(latlng, {
+                icon: L.divIcon({
+                    className: "aws-div-icon",
+                    html: `<span style="background-color: ${color};">${feature.properties.HS.toFixed(1)}</span>`
+                })
+            })
+        }
+    }) .addTo(themaLayer.snow);
+
 }
 
 // GeoJSON der Wetterstationen laden
@@ -125,6 +154,7 @@ async function showStations(url) {
     }).addTo(themaLayer.stations);
     showTemperature(geojson);
     showWind(geojson);
+    showSnow(geojson);
 
 }
 showStations("https://static.avalanche.report/weather_stations/stations.geojson");
