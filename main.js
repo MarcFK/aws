@@ -113,7 +113,7 @@ function showWind(geojson) {
 function showSnow(geojson) {
     L.geoJSON(geojson, {
         filter: function(feature) {
-            if (feature.properties.HS > -5 && feature.properties.HS < 600) {
+            if (feature.properties.HS > 0 && feature.properties.HS < 600) {
                 return true;
             }
         },
